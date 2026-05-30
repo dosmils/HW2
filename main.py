@@ -88,3 +88,24 @@ class ShoppingList:
         merged_shopping_list = ShoppingList()
         merged_shopping_list._items = self._items + other._items
         return merged_shopping_list
+
+
+class DietaryRecipe(Recipe):
+    def __init__(self, title, diet_type, ingredients=None):
+        super().__init__(title)
+        if ingredients:
+            self.ingredients = ingredients
+
+
+    def scale(self, ratio: float) -> DietaryRecipe:
+        scaled = super().scale(ratio)
+        new_recipe = DietaryRecipe(self.title, self.diet_type)
+        new_recipe.ingredients = scaled.ingredients
+        return new_recipe
+
+    def __str__(self):
+        return f"Название блюда: [{self.diet_type}] {self.title}. Ингредиенты: {'\n'.join(str(i) for i in self.ingredients)}."
+
+
+
+
