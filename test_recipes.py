@@ -2,8 +2,10 @@ import pytest
 
 from main import Ingredient
 from main import Recipe
+from main import ShoppingList
 
 test_cases = [("Мука", 500, "г"), ("Мука", 100, "г"), ("Яблоко", 500, "г"), ("Мука", 500, "кг")]
+test_cases_shopping_lists = []
 
 
 @pytest.fixture
@@ -66,5 +68,64 @@ def test_class_Recipe_len(recipe):
 
 @pytest.fixture
 def shopping_list():
+    shopping_list = ShoppingList()
+    recipe = Recipe("Шарлотка")
+    recipe.add_ingredient(Ingredient("Яйцо", 100, "г"))
+    recipe_1 = Recipe("Шарлотка")
+    recipe_1.add_ingredient(Ingredient("Мука", 100, "г"))
+    shopping_list.add_recipe(recipe, 100)
+    shopping_list.add_recipe(recipe_1, 100)
+    return shopping_list
 
 
+@pytest.fixture
+def shopping_list1():
+    shopping_list1 = ShoppingList()
+    recipe = Recipe("Салат")
+    recipe.add_ingredient(Ingredient("Яйцо", 10, "г"))
+    shopping_list1.add_recipe(recipe, 100)
+    return shopping_list1
+
+
+@pytest.fixture
+def shopping_list2():
+    shopping_list2 = ShoppingList()
+    recipe = Recipe("Шарлотка")
+    recipe.add_ingredient(Ingredient("Яйцо", 100, "г"))
+    recipe_1 = Recipe("Шарлотка")
+    recipe_1.add_ingredient(Ingredient("Мука", 100, "г"))
+    shopping_list2.add_recipe(recipe, 100)
+    shopping_list2.add_recipe(recipe_1, 100)
+    return shopping_list2
+
+
+def test_class_ShoppingList_add_recipe(shopping_list, recipe):
+    right_recipe = recipe
+    shopping_list.add_recipe(right_recipe, 10)
+    assert len(shopping_list._items) > 0
+    wrong_recipe = Recipe("Салат")
+    with pytest.raises(ValueError):
+        shopping_list.add_recipe(wrong_recipe, -100)
+
+
+def test_class_ShoppingList_remove_recipe(shopping_list, recipe):
+    shopping_list.remove_recipe("Шарлотка")
+    assert all(el[1] != "Шарлотка" for el in shopping_list._items)
+    shopping_list.remove_recipe("Салат")
+    assert all(el[1] != "Салат" for el in shopping_list._items)
+
+
+def test_class_ShoppingList_get_list(shopping_list):
+    result = shopping_list.get_list()
+    egg = next(i for i in result if i.name == "Яйцо")
+    assert egg.quantity == 10000.0
+    names = [i.name for i in shopping_list.get_list()]
+    assert names == sorted(names)
+
+
+def test_class_ShoppingList_add(shopping_list1, shopping_list2):
+    shop_list1_copy, shop_list2_copy = shopping_list1._items.copy(), shopping_list2._items.copy()
+    new_shopping_list = shopping_list1.__add__(shopping_list2)
+    assert new_shopping_list
+    assert shop_list1_copy == shopping_list1._items
+    assert shop_list2_copy == shopping_list2._items
