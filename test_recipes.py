@@ -1,6 +1,7 @@
 import pytest
 
 from main import Ingredient
+from main import Recipe
 
 test_cases = [("Мука", 500, "г"), ("Мука", 100, "г"), ("Яблоко", 500, "г"), ("Мука", 500, "кг")]
 
@@ -29,3 +30,41 @@ def test_class_Ingredient_eq():
     assert ingredient1.__eq__(ingredient2)
     assert not ingredient1.__eq__(ingredient3)
     assert not ingredient1.__eq__(ingredient4)
+
+
+@pytest.fixture
+def recipe():
+    recipe = Recipe("Шарлотка")
+    recipe.add_ingredient(Ingredient("Яйцо", 100, "г"))
+    recipe.add_ingredient(Ingredient("Мука", 500, "г"))
+    return recipe
+
+
+def test_class_Recipe_init(recipe):
+    assert recipe.title == "Шарлотка"
+    assert recipe.ingredients == [Ingredient("Яйцо", 100, "г"), Ingredient("Мука", 500, "г")]
+
+
+def test_add_ingredient(recipe):
+    new_ingredient = Ingredient("Мука", 500, "г")
+    recipe.add_ingredient(new_ingredient)
+    assert recipe.ingredients[1].quantity == 1000.0
+
+
+def test_class_Recipe_scale(recipe):
+    new_recipe = recipe.scale(100)
+    assert new_recipe != recipe
+    assert new_recipe.ingredients[0].quantity == 10000.0
+    assert new_recipe.ingredients[1].quantity == 100000.0
+    with pytest.raises(ValueError):
+        recipe.scale(-100)
+
+
+def test_class_Recipe_len(recipe):
+    assert recipe.__len__() == 2
+
+
+@pytest.fixture
+def shopping_list():
+
+
