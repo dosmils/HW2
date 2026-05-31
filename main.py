@@ -41,7 +41,7 @@ class Recipe:
     def is_valid_ratio(ratio) -> bool:
         return isinstance(ratio, (int, float)) and ratio > 0
 
-    def scale(self, ratio: float) -> Recipe:
+    def scale(self, ratio: float):
         new_recipe = Recipe(self.title)
         for i in self.ingredients:
             new_ingredient = Ingredient(i.name, i.quantity * ratio, i.unit)
@@ -84,7 +84,7 @@ class ShoppingList:
         answer.sort(key=lambda x: x.name)
         return answer
 
-    def __add__(self, other: ShoppingList) -> ShoppingList:
+    def __add__(self, other: ShoppingList):
         merged_shopping_list = ShoppingList()
         merged_shopping_list._items = self._items + other._items
         return merged_shopping_list
@@ -93,11 +93,12 @@ class ShoppingList:
 class DietaryRecipe(Recipe):
     def __init__(self, title, diet_type, ingredients=None):
         super().__init__(title)
+        self.diet_type = diet_type
         if ingredients:
             self.ingredients = ingredients
 
 
-    def scale(self, ratio: float) -> DietaryRecipe:
+    def scale(self, ratio: float):
         scaled = super().scale(ratio)
         new_recipe = DietaryRecipe(self.title, self.diet_type)
         new_recipe.ingredients = scaled.ingredients

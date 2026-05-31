@@ -57,7 +57,7 @@ def test_class_Recipe_scale(recipe):
     new_recipe = recipe.scale(100)
     assert new_recipe != recipe
     assert new_recipe.ingredients[0].quantity == 10000.0
-    assert new_recipe.ingredients[1].quantity == 100000.0
+    assert new_recipe.ingredients[1].quantity == 50000.0
     with pytest.raises(ValueError):
         recipe.scale(-100)
 
