@@ -59,7 +59,7 @@ class ShoppingList:
     def __init__(self):
         self._items = []
 
-    def add_recipe(self, recipe: Recipe, portions: float):
+    def add_recipe(self, recipe, portions: float):
         if portions <= 0:
             raise ValueError("Количество порций должно быть положительным")
         scaled = recipe.scale(portions)
@@ -84,7 +84,7 @@ class ShoppingList:
         answer.sort(key=lambda x: x.name)
         return answer
 
-    def __add__(self, other: ShoppingList):
+    def __add__(self, other):
         merged_shopping_list = ShoppingList()
         merged_shopping_list._items = self._items + other._items
         return merged_shopping_list
