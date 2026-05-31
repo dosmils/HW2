@@ -44,7 +44,7 @@ recipe-manager/
 ```bash
 # 1. Клонировать репозиторий
 git clone https://github.com/dosmils/HW2
-cd recipe-manager
+cd HW2
  
 # 2. Установить зависимости
 pip install -r requirements.txt
